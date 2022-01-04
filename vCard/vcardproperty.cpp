@@ -28,6 +28,8 @@
 #include <ctime>
 #include <time.h>
 #include <iomanip>
+#include <iostream>
+#include <cstring>
 
 vCardProperty::vCardProperty()
 {
@@ -146,40 +148,83 @@ std::vector<vCardProperty> vCardProperty::fromString(const std::string& data)
 {
     std::vector<vCardProperty> properties;
 
-    std::string line;
-    std::stringstream ss(data);
-    while(std::getline(ss, line)) {
-        if (line == VC_BEGIN_TOKEN || line == VC_END_TOKEN)
-            break;
+    // std::string line;
+    // std::stringstream ss(data);
+
+    if(std::strcmp(data.c_str(), VC_BEGIN_TOKEN) != 0 && std::strcmp(data.c_str(), VC_END_TOKEN) != 0) {
+        //std::cerr << "Not BEGIN or END token: " << data.length() << ":" << data << std::endl; // << data << " / " << data.length() << std::endl;
 
         // tokens conatins a pair of key and value per line
-        std::pair<std::string, std::string> tokens = StrUtils::simpleSplit(line,VC_ASSIGNMENT_TOKEN);
-        if(tokens.first.size() == 0 && tokens.second.size() == 0)
-            break;
+        std::pair<std::string, std::string> tokens = StrUtils::simpleSplit(data,VC_ASSIGNMENT_TOKEN);
+        if(tokens.first.size() > 0 && tokens.second.size() > 0) {
 
-        // check if the name has params
-        bool hasModifiers = false;
-        std::string paramName = tokens.first;
-        size_t pos = tokens.first.find(VC_SEPARATOR_TOKEN, 0);
-        if(pos != std::string::npos) { // not a single param name without modifiers
-            paramName = tokens.first.substr(0, pos);
-            hasModifiers = true;
-        }
+            //std::cerr << tokens.first << ":::" << tokens.second << std::endl;
+            //std::cerr << "Token is: " << tokens.first << std::endl;
 
-        // the value after the first occurance of VC_ASSIGNMENT_TOKEN
-        std::string paramValue = StrUtils::trim(tokens.second);
-
-        if (paramName != VC_VERSION) {
-            if(hasModifiers == false) { // there are no properties in the patameterName, like "FN:John Doe"
-                properties.push_back( vCardProperty(paramName, paramValue) );
+            // check if the name has params
+            bool hasModifiers = false;
+            std::string paramName = tokens.first;
+            size_t pos = tokens.first.find(VC_SEPARATOR_TOKEN, 0);
+            if(pos != std::string::npos) { // not a single param name without modifiers
+                paramName = tokens.first.substr(0, pos);
+                hasModifiers = true;
             }
 
-            else {
-                vCardParamList paramList = vCardParam::fromString(tokens.first.substr(pos+1));
-                properties.push_back( vCardProperty(paramName, paramValue, paramList) );
+            // the value after the first occurance of VC_ASSIGNMENT_TOKEN
+            std::string paramValue = StrUtils::trim(tokens.second);
+
+            if (paramName != VC_VERSION) {
+                if(hasModifiers == false) { // there are no properties in the patameterName, like "FN:John Doe"
+                    properties.push_back( vCardProperty(paramName, paramValue) );
+                }
+
+                else {
+                    vCardParamList paramList = vCardParam::fromString(tokens.first.substr(pos+1));
+                    properties.push_back( vCardProperty(paramName, paramValue, paramList) );
+                }
             }
         }
     }
+
+
+    // while(std::getline(ss, line)) {
+    //     std::cerr << "Current line is: " << line << std::endl;
+    //     if (line == VC_BEGIN_TOKEN || line == VC_END_TOKEN) {
+    //         std::cerr << "Is begin or end token: "  << line << std::endl;
+    //         break;
+    //     }
+
+    //     // tokens conatins a pair of key and value per line
+    //     std::pair<std::string, std::string> tokens = StrUtils::simpleSplit(line,VC_ASSIGNMENT_TOKEN);
+    //     if(tokens.first.size() == 0 && tokens.second.size() == 0)
+    //         break;
+
+    //     //std::cerr << tokens.first << ":::" << tokens.second << std::endl;
+    //     std::cerr << "Token is: " << tokens.first << std::endl;
+
+    //     // check if the name has params
+    //     bool hasModifiers = false;
+    //     std::string paramName = tokens.first;
+    //     size_t pos = tokens.first.find(VC_SEPARATOR_TOKEN, 0);
+    //     if(pos != std::string::npos) { // not a single param name without modifiers
+    //         paramName = tokens.first.substr(0, pos);
+    //         hasModifiers = true;
+    //     }
+
+    //     // the value after the first occurance of VC_ASSIGNMENT_TOKEN
+    //     std::string paramValue = StrUtils::trim(tokens.second);
+
+    //     if (paramName != VC_VERSION) {
+    //         if(hasModifiers == false) { // there are no properties in the patameterName, like "FN:John Doe"
+    //             properties.push_back( vCardProperty(paramName, paramValue) );
+    //         }
+
+    //         else {
+    //             vCardParamList paramList = vCardParam::fromString(tokens.first.substr(pos+1));
+    //             properties.push_back( vCardProperty(paramName, paramValue, paramList) );
+    //         }
+    //     }
+    // }
 
     return properties;
 }

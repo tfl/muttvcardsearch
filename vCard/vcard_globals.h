@@ -34,7 +34,8 @@
 enum vCardVersion
 {
     VC_VER_2_1,
-    VC_VER_3_0
+    VC_VER_3_0,
+    VC_VER_4_0
 };
 
 #endif // VCARD_GLOBALS_H

@@ -39,12 +39,17 @@ CardCurler::CardCurler(const std::string &username, const std::string &password,
 
 /*
  * Private method: used to detect the URL's a carddav server has to offer
- * Returns a QStringList of all url's found by the XML query given
+ * Returns a vector of strings of all url's found by the XML query given
  *
  * @query : the xml snippet the carddav server expects to receive
- * @return: a QStringList of raw vcard strings (BEGIN:VCARD ... END:VCARD)
+ * @return: a vector<std::string> of raw vcard strings (BEGIN:VCARD ... END:VCARD)
  */
 std::vector<std::string> CardCurler::getvCardURLs(const std::string &query) {
+
+    if(Option::isVerbose()) {
+        std::cout << "CardCurler::getvCardURLs using query parameter: " << query << std::endl;
+    }
+
     std::string s = get("PROPFIND", query);
 
     if(Option::isVerbose()) {
@@ -71,14 +76,18 @@ std::vector<std::string> CardCurler::getvCardURLs(const std::string &query) {
         if(Option::isVerbose()) {
             std::cout << "Assume Radicale response as there are no namespaces" << std::endl;
         }
+    } else if ( StringUtils::contains(s, "<ns0:href>")) {
+        // Xandikos
+        href_begin = "<ns0:href>";
+        href_end   = "</ns0:href>";
+
+        if(Option::isVerbose()) {
+            std::cout << "Seems to be a Xandikos server" << std::endl;
+        }
     }
 
     std::vector<std::string> result;
     std::vector<std::string> tokens = StringUtils::split(s, href_begin);
-
-    if(Option::isVerbose()) {
-        std::cout << "Found " << tokens.size() << " tokens" << std::endl;
-    }
 
     if(tokens.size() >= 1) {
         for(unsigned int i=1; i<tokens.size(); i++) {
@@ -147,6 +156,7 @@ std::vector<Person> CardCurler::getAllCards(const std::string &server, const std
         }
 
         std::string card;
+
         std::string auth(_username + ":" + _password);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
         curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
@@ -178,15 +188,15 @@ std::vector<Person> CardCurler::getAllCards(const std::string &server, const std
                 break;
             }
 
-            if(Option::isVerbose()) {
-                std::cerr << "TRACE: " << "Card size: " << card.size() << " chars" << std::endl;
-            }
+            // if(Option::isVerbose()) {
+            //     std::cerr << "TRACE: " << "Card size: " << card.size() << " chars" << std::endl;
+            //     std::cerr << card << std::endl;
+            // }
 
             if(card.size() > 0) {
-                Person p;
                 std::vector<vCard> cards = vCard::fromString(card);
-
                 if(cards.size() == 1) {
+                    Person p;
                     createPerson(&cards[0], &p);
                     if(p.isValid()) {
                         std::cout << "fetched valid vcard from: " << server << url << endl;

@@ -178,6 +178,10 @@ std::string vCard::toString(vCardVersion version) const
             lines.push_back(vCardProperty(VC_VERSION, "3.0").toString());
             break;
 
+        case VC_VER_4_0:
+            lines.push_back(vCardProperty(VC_VERSION, "4.0").toString());
+            break;
+
         default:
             return std::string();
     }
@@ -232,7 +236,7 @@ std::vector<vCard> vCard::fromString(const std::string& data)
                 if(StrUtils::startWith(line, " ")) { // should be a regex!
                     lastLine.append(StrUtils::ltrim(line));
                 } else {
-                    vCardPropertyList props = vCardProperty::fromString(lastLine);
+                    vCardPropertyList props = vCardProperty::fromString(StrUtils::rtrim(lastLine));
                     current.addProperties(props);
                     lastLine = line;
                 }
@@ -240,6 +244,7 @@ std::vector<vCard> vCard::fromString(const std::string& data)
 
             vCardPropertyList props = vCardProperty::fromString(lastLine);
             current.addProperties(props);
+
             current.setRawData(vcard);
 
             if(current.isValid())

@@ -56,6 +56,7 @@
 #define VC_TITLE                "TITLE"
 #define VC_URL                  "URL"
 #define VC_VERSION              "VERSION"
+#define VC_GENDER               "Gender"
 
 class vCardProperty
 {
