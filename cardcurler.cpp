@@ -378,6 +378,11 @@ std::vector<Person> CardCurler::curlCache(const std::string &query) {
 }
 
 // curl a card online
+//
+// to see what a carddav server returns use curl:
+// curl -X REPORT -d @query.xml -u user:pass <server url>
+// where the contents of the query file matches
+// https://datatracker.ietf.org/doc/html/rfc6352#section-8.6.4
 std::vector<Person> CardCurler::curlCard(const std::string &query) {
 
     // Result
@@ -402,6 +407,11 @@ std::vector<Person> CardCurler::curlCard(const std::string &query) {
     if(http_result.find("<CR:address-data>") != std::string::npos) { // RADICALE
         vcardAddressBeginToken = "<CR:address-data>";
         vcardAddressEndToken   = "</CR:address-data>";
+    }
+
+    if(http_result.find("<VC:address-data>") != std::string::npos) { // DAVICAL
+        vcardAddressBeginToken = "<VC:address-data>";
+        vcardAddressEndToken   = "</VC:address-data>";
     }
 
     std::vector<std::string> list = StringUtils::split(http_result, vcardAddressBeginToken);
