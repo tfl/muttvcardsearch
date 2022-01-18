@@ -414,6 +414,11 @@ std::vector<Person> CardCurler::curlCard(const std::string &query) {
         vcardAddressEndToken   = "</VC:address-data>";
     }
 
+    if(http_result.find("<ns1:address-data>") != std::string::npos) { // Xandikos
+        vcardAddressBeginToken = "<ns1:address-data>";
+        vcardAddressEndToken   = "</ns1:address-data>";
+    }
+
     std::vector<std::string> list = StringUtils::split(http_result, vcardAddressBeginToken);
     if(list.size() > 0) {
         for(unsigned int i=1; i<list.size(); i++) {
