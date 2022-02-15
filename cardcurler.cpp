@@ -238,7 +238,7 @@ void CardCurler::createPerson(const vCard *vcdata, Person *p) {
         vCardProperty vcProperty(*it);
         std::string vcName(vcProperty.name());
 
-        if(vcName == VC_EMAIL) {
+        if(vcName == VC_EMAIL || vcName == VC_EMAIL_CB) {
             std::vector<std::string> emails = vcProperty.values();
             for(std::vector<std::string>::const_iterator it = emails.begin(); it != emails.end(); ++it) {
                 std::string email(*it);
@@ -249,8 +249,10 @@ void CardCurler::createPerson(const vCard *vcdata, Person *p) {
             if (values.size() >= 2) { // at least firstname and lastname should be there
                 std::string fName = values.at(vCardProperty::Firstname);
                 std::string lName = values.at(vCardProperty::Lastname);
-                if(!fName.size() == 0 && !fName.size() == 0) {
+                if(fName.size() > 0) {
                     p->FirstName = fName;
+                }
+                if(lName.size() > 0) {
                     p->LastName = lName;
                 }
             }

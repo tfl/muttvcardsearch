@@ -16,6 +16,7 @@ SearchTemplates::SearchTemplates()
     searchTemplate += "<C:address-data>";
     searchTemplate += "<C:prop name=\"EMAIL\"/>";
     searchTemplate += "<C:prop name=\"FN\"/>";
+    searchTemplate += "<C:prop name=\"ITEM1.EMAIL\"/>";
     searchTemplate += "</C:address-data>";
     searchTemplate += "</D:prop>";
     searchTemplate += "<C:filter test=\"anyof\">";

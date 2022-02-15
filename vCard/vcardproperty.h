@@ -36,6 +36,7 @@
 #define VC_CLASS                "CLASS"
 #define VC_DELIVERY_LABEL       "LABEL"
 #define VC_EMAIL                "EMAIL"
+#define VC_EMAIL_CB             "ITEM1.EMAIL" /* Thunderbird/Cardbook Plugin */
 #define VC_FORMATTED_NAME       "FN"
 #define VC_GEOGRAPHIC_POSITION  "GEO"
 #define VC_KEY                  "KEY"
