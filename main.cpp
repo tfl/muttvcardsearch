@@ -40,34 +40,40 @@ void printError(const std::string &detail) {
     cout << "          Version " << MAJOR << "." << MINOR << endl;
     cout << "*******************************" << endl << endl;
 
-    cout << ":::::::: ABOUT ::::" << endl;
+    cout << ":::: ABOUT ::::" << endl;
     cout << APPNAME << " is a small adressbook utility for the mutt mailclient to read your contacts" << endl;
     cout << "from an owncloud or SOGo carddav list. Licensed under GPLv2." << endl;
     cout << "(C) Torsten Flammiger, 2013" << endl;
     cout << "(C) Ike Devolder, 2015" << endl;
-    cout << "See https://github.com/BlackIkeEagle/" << APPNAME << " for updates and source." << endl << endl;
+    cout << "(C) Torsten Flammiger, 2022..." << endl;
+    cout << "See https://github.com/tfl/" << APPNAME << " for updates and source." << endl << endl;
 
     cout << ":::: CONFIGURE ::::" << endl;
     cout << "$ " << APPNAME << "  --name=GIVE-IT-A-NAME \\" << endl;
-    cout << "                   --server=OWNCLOUD|SOGo-CARDDAV-URL \\" << endl;
+    cout << "                   --server=OWNCLOUD|SOGo-CARDDAV-URL|Davical|... \\" << endl;
     cout << "                   --username=USERNAME \\" << endl;
     cout << "                   --password=PASSWORD \\" << endl << endl;
 
-    cout << ":::::::: CACHE ::::" << endl;
+    cout << ":::: CACHE ::::" << endl;
     cout << "$ " << APPNAME << " --create-local-cache" << endl;
     cout << APPNAME << " will then create a local cache of all your vcards and will return data from" << endl;
     cout << "the cache first. If no data was found '" << APPNAME << "' will then query the server." << endl << endl;
 
-    cout << "::::::: SEARCH ::::" << endl;
+    cout << ":::: SEARCH ::::" << endl;
     cout << "$ " << APPNAME << " <query>" << endl;
     cout << "where <query> is part of the fullname or email to search. Dont use wildcards, like *" << endl << endl;
 
-    cout << "NOTE: enclose the parameter values in single or double quotes only if they contain whitespace" << endl;
-    cout << "NOTE: a valid Owncloud 4.5 carddav resource url looks something like this:" << endl;
-    cout << "      http(s)://<YOUR SERVER.COM>/remote.php/carddav/addressbooks/<USERNAME>/<NAME OF YOUR LIST>" << endl;
-    cout << "NOTE: the configuration is stored under ~/.config/" << APPNAME << endl;
-    cout << "NOTE: your password will not be encrypted! Therefore a chmod go-rwx on ~/.config/" << APPNAME << endl;
-    cout << "      will be executed everytime you configure the application" << endl;
+    cout << "Some Notes" << endl;
+    cout << endl;
+    cout << " Enclose the parameter values in single or double quotes only if they contain whitespace" << endl;
+    cout << endl;
+    cout << " Example resource urls:" << endl;
+    cout << " Owncloud: http(s)://<YOUR SERVER.COM>/remote.php/carddav/addressbooks/<USERNAME>/<NAME OF YOUR LIST>" << endl;
+    cout << " Davical: http(s)://<YOUR SERVER.COM>/caldav.php/<USERNAME>/addresses/" << endl;
+    cout << endl;
+    cout << " The configuration is stored under ~/.config/" << APPNAME << endl;
+    cout << " Your password will not be encrypted! Therefore a chmod go-rwx on ~/.config/" << APPNAME << endl;
+    cout << " will be executed everytime you configure the application" << endl;
     cout << endl;
 }
 
