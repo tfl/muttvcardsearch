@@ -24,5 +24,5 @@
 // update the .pro file too if you change APPNAME
 #define APPNAME "muttvcardsearch"
 #define MAJOR 1
-#define MINOR 10
+#define MINOR 11
 #endif // VERSION_H

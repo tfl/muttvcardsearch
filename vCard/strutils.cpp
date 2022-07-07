@@ -101,12 +101,12 @@ std::string StrUtils::trim(std::string &input) {
 }
 
 std::string StrUtils::ltrim(std::string &input) {
-    input.erase(input.begin(), std::find_if(input.begin(), input.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+    input.erase(input.begin(), std::find_if(input.begin(), input.end(), [](int c) { return !std::isspace(c);}));
     return input;
 }
 
 std::string StrUtils::rtrim(std::string &input) {
-    input.erase(std::find_if(input.rbegin(), input.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), input.end());
+    input.erase(std::find_if(input.rbegin(), input.rend(), [](int c) { return !std::isspace(c);}).base(), input.end());
     return input;
 }
 
